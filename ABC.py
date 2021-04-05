@@ -51,6 +51,8 @@ class Item:
         self.quantity_left = int(quantity_left)
         if acquire_condition:
             self.acquire_condition = acquire_condition.split(", ")
+        else:
+            self.acquire_condition = False
         self.inventory_number: int = 0
 
 

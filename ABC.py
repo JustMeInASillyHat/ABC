@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import os
 import re
 from time import sleep
-
 import pandas as pd
 import json
+# https://github.com/JustMeInASillyHat/ABC
 
-##### Note: A more complete reset system would be necessary for some dialogue to make more sense!
+# Note: A more complete reset system would be necessary for some dialogue to make more sense!
 
 PLOT_EVENTS = []
 COMMANDS = []
@@ -116,13 +117,13 @@ def fetch_valid_targets(location, command):
 
 
 def list_commands(location: Location):
-    display(f"⭐ Current location: {location.displayname}")
-    display(
+    print(f"⭐ Current location: {location.displayname}")
+    print(
         f"⭐ Locations reachable from here: {[location.displayname for location in location.locations_within_reach]}")
-    display("    ⭐ Type \"go to <location>\" to approach any of the above.")
-    display("    ⭐ HINT: Type \"alias <object>\" to discover easier ways to reference a character, location, or item")
+    print("    ⭐ Type \"go to <location>\" to approach any of the above.")
+    print("    ⭐ HINT: Type \"alias <object>\" to discover easier ways to reference a character, location, or item")
     if location.NPCs_present:
-        display("⭐ Interactions available:")
+        print("⭐ Interactions available:")
         for npc in location.NPCs_present:
             actions = []
             for action in [TALK, PET, PICK_UP, GIVE]:
@@ -132,11 +133,11 @@ def list_commands(location: Location):
                 actions.remove(GIVE)
                 if len(INVENTORY) > 0:
                     actions.append("give <item>")
-            display(f"    ⭐ {npc.displayname} {actions}")
+            print(f"    ⭐ {npc.displayname} {actions}")
     if len(INVENTORY) > 0:
-        display(f"⭐ Inventory:")
+        print(f"⭐ Inventory:")
         for item in INVENTORY:
-            display(f"    ⭐ {item.inventory_number}x {item.displayname}: {item.description}")
+            print(f"    ⭐ {item.inventory_number}x {item.displayname}: {item.description}")
 
 
 def condition_met(condition):
@@ -344,9 +345,11 @@ def give(npc, item, location: Location):
     npc_mask = table["target"] == npc.name
     item_mask = table["item"] == item.name
     output = None
-    state_trigger = table[npc_mask & item_mask].iloc[0]["state_trigger"]
+    state_triggers = table[npc_mask & item_mask].iloc[0]["state_triggers"]
+    if state_triggers:
+        state_triggers = state_triggers.split(", ")
     item_exchange = table[npc_mask & item_mask].iloc[0]["item_exchange"]
-    if state_trigger != "":
+    for state_trigger in state_triggers:
         trigger_plot_event(state_trigger)
     if item_exchange:
         add_inventory(location, list(filter(lambda x: x.name == item_exchange, ITEMS))[0])
@@ -392,8 +395,8 @@ def missing_item():
     display("You did not specify a valid item!")
 
 
-def item_not_in_inventory():
-    display("The item you specified is not in your inventory!")
+def item_not_in_inventory(item):
+    display(f"You couldn't find any {item} in your inventory!")
 
 
 def out_of_reach():
@@ -463,8 +466,6 @@ def parse_input(raw_input, location):
                         give(targets[1], targets[0], location)
                     elif targets[0] in NPCs and targets[1] in INVENTORY:
                         give(targets[0], targets[1], location)
-                    else:
-                        item_not_in_inventory()
                 elif command.name == GO:
                     current_location = go(current_location, targets[0])
                 else:
@@ -475,7 +476,15 @@ def parse_input(raw_input, location):
                 if targets[0] in ITEMS:
                     missing_NPC()
                 elif targets[0] in NPCs:
-                    missing_item()
+                    known_item = False
+                    for item in ITEMS:
+                        for alias in item.aliases:
+                            if re.search(alias, raw_input):
+                                item_not_in_inventory(alias)
+                                known_item = True
+                                continue
+                    if not known_item:
+                        missing_item()
                 else:
                     invalid_target()
     return current_location
@@ -500,7 +509,26 @@ def display(message):
 def setup():
     mode = input("Please enter your name to proceed:\n")
     if mode == "debug":
-        return True, "Sophia", ["How are you doing?", "Thanks for debugging the game!"], "ABC_OG.xlsx", "otd_og.json"
+        print("Which excel file would you like to use?")
+        excel_files = []
+        for item in os.listdir():
+            if item.endswith(".xlsx"):
+                print(f"- {item}")
+                excel_files.append(item)
+        excel_file = ""
+        while excel_file not in excel_files:
+            excel_file = input(">>> ")
+
+        print("Which json file would you like to use?")
+        json_files = []
+        for item in os.listdir():
+            if item.endswith(".json"):
+                print(f"- {item}")
+                json_files.append(item)
+        json_file = ""
+        while json_file not in json_files:
+            json_file = input(">>> ")
+        return True, "Sophia", ["How are you doing?", "Thanks for debugging the game!"], excel_file, json_file
     elif mode == "Conor":
         return False, "Conor", ["I really love you", "Thanks for helping me learn how to code <3"], "ABC_OG.xlsx", "otd_og.json"
     else:

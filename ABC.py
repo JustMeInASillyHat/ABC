@@ -49,7 +49,8 @@ class Item:
         self.description: str = description
         self.is_NPC: bool = is_NPC
         self.quantity_left = int(quantity_left)
-        self.acquire_condition = acquire_condition
+        if acquire_condition:
+            self.acquire_condition = acquire_condition.split(", ")
         self.inventory_number: int = 0
 
 
@@ -140,19 +141,18 @@ def list_commands(location: Location):
             print(f"    ⭐ {item.inventory_number}x {item.displayname}: {item.description}")
 
 
-def condition_met(condition):
-    if not condition:
-        return True
-    try:
-        if list(filter(lambda event: event.name == condition, PLOT_EVENTS))[0].active:
-            return True
-        else:
-            return False
-    except IndexError:
-        if condition in [item.name for item in INVENTORY]:
-            return True
-        else:
-            return False
+def condition_met(conditions):
+    outcome = True
+    if not conditions:
+        return outcome
+    for condition in conditions:
+        try:
+            if not list(filter(lambda event: event.name == condition, PLOT_EVENTS))[0].active:
+                outcome = False
+        except IndexError:
+            if condition not in [item.name for item in INVENTORY]:
+                outcome = False
+    return outcome
 
 
 def add_inventory(location: Location, item: Item):

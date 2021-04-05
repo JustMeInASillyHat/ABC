@@ -1,0 +1,43 @@
+{
+  "cat_nipped":{
+    "talk": {
+      "vampire kid": "The vampire kid looks up from petting the skelekitty. \"She's so docile now, look! Isn't it adorable?\"",
+      "skelekitty": "The skelekitty may not have been able to speak before, but now your words barely seem to register at all, as it lols on the floor happily."
+    },
+    "pet": {
+      "skelekitty": "The skelekitty appears to be spectacularly cuddly since receiving the spirit nip. It rubs itself against you affectionately, kneading your lap and licking your hands."
+    },
+    "pick up": {
+      "skelekitty": "As you pick up the skelekitty your hands are buffered by shimmering void, keeping the bones at a little distance from your hands. The cat flops liquidly, bones bouncing ambiently within it, and you feel a satisfied purr vibrating through its body."
+    }
+},
+  "tooth":{
+    "talk": {
+      "frog": "You tell the frog that you have the tooth, and consider for a moment whether you should question what magic he needs it for, but decide to stay out of it. He seems keen to make a trade."
+    }
+  },
+  "apron_donned":{
+    "talk": {
+      "customer": "\"Oh, I didn't realise you worked here!\"",
+      "Frank/Stein": "\"You know wearing that doesn't make us think you're an employee, right?\""
+    },
+    "catnip": {
+      "customer": "The customer looks up in surprise. \"I'm sorry, you must have the wrong table! We didn't order any spirit nip.\""
+    }
+  },
+  "cat_pet": {
+    "pet": {
+    "familiar": "The spirit sniffs your hand cautiously and instantly backs away, a low growl forming in the back of its throat, hackles rising menacingly. It can probably still smell the skelekitty!"
+  }
+  },
+  "spirit_pet":{
+    "pet": {
+      "skelekitty": "The skelekitty doesn't seem as friendly now as it did before. Perhaps it can still smell the customer's familiar on you."
+    }
+  },
+  "kid_cat":{
+    "talk": {
+      "kid": "The vampire kid puts the skelekitty back down to talk to you."
+    }
+  }
+}

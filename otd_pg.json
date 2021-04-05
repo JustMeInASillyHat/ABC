@@ -39,5 +39,10 @@
     "talk": {
       "kid": "The vampire kid puts the skelekitty back down to talk to you."
     }
+  },
+  "frog_occupied": {
+    "talk": {
+      "frog": "\"Hmn?\" the frog wizard doesn't look up as you address him, evidently too engrossed in his potion-making to talk to you."
+    }
   }
 }

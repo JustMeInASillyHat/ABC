@@ -323,8 +323,6 @@ def execute_command(command: Command, target: NPC, location: Location):
 
 def go(current_location, destination: Location):
     event_reset("door")
-    if destination.name == "oc":
-        go_oc()
     if destination.locked:
         display(destination.locked)
         return current_location
@@ -338,7 +336,8 @@ def go(current_location, destination: Location):
                 display(destination.standard_entrance_description)
             destination.entered = True
         if destination.name == "oc":
-            return current_location
+            go_oc()
+            destination = current_location
         return destination
 
 

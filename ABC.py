@@ -420,10 +420,10 @@ def parse_input(raw_input, location):
             for alias in object.aliases:
                 if raw_input.endswith(alias):
                     display(f"{object.name}: {[alias.lower() for alias in object.aliases]}")
-                else:
-                    if checkall.index(object) == len(checkall) - 1:
-                        display(f"No aliases for {raw_input[6:]} can be found at this time")
-                        return current_location
+                    return current_location
+                if checkall.index(object) == len(checkall) - 1:
+                    display(f"No aliases for {raw_input[6:]} can be found at this time")
+                    return current_location
     else:
         for command in COMMANDS:
             if re.search(command.name, raw_input):

@@ -227,7 +227,7 @@ def event_reset(type):
 
 def action_confirm(action: str):
     display(f"Would you like to {action}?")
-    if input(">>> ") == "Y" or "y" or "yes" or "Yes" or "sure" or "OK" or "ok" or "okay":
+    if input(">>> ") in ["Y","y","yes","Yes","sure","OK","ok","okay"]:
         return True
     else:
         return False
@@ -407,6 +407,10 @@ def already_there():
     display("You're already there!")
 
 
+def no_place():
+    display("No such place exists!")
+
+
 def parse_input(raw_input, location):
     targets = []
     commands_mentioned = []
@@ -458,6 +462,7 @@ def parse_input(raw_input, location):
                             if raw_input.find(alias) != -1:
                                 out_of_reach()
                                 return current_location
+                    no_place()
                 else:
                     no_target()
             elif len(targets) == desired_number:
